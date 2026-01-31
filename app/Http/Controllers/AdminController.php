@@ -1,0 +1,147 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Counter;
+use App\Models\Location;
+use App\Models\Ticket;
+use App\Models\User;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+
+class AdminController extends Controller
+{
+    public function dashboard(): View
+    {
+        $stats = [
+            'total_locations' => Location::count(),
+            'active_locations' => Location::where('is_active', true)->count(),
+            'total_operators' => User::where('role', 'operator')->count(),
+            'today_tickets' => Ticket::whereDate('created_at', today())->count(),
+            'today_completed' => Ticket::whereDate('created_at', today())->where('status', 'completed')->count(),
+            'today_waiting' => Ticket::where('status', 'waiting')->count(),
+        ];
+
+        $locations = Location::withCount([
+            'tickets as today_tickets_count' => fn ($q) => $q->whereDate('created_at', today()),
+            'tickets as waiting_count' => fn ($q) => $q->where('status', 'waiting'),
+        ])->get();
+
+        return view('admin.dashboard', compact('stats', 'locations'));
+    }
+
+    // Location Management
+    public function locations(): View
+    {
+        $locations = Location::withCount('counters', 'users')->get();
+        return view('admin.locations.index', compact('locations'));
+    }
+
+    public function createLocation(): View
+    {
+        return view('admin.locations.create');
+    }
+
+    public function storeLocation(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'code' => ['required', 'string', 'max:10', 'unique:locations,code'],
+            'description' => ['nullable', 'string'],
+            'address' => ['nullable', 'string', 'max:255'],
+            'average_service_time' => ['required', 'integer', 'min:1', 'max:120'],
+            'open_time' => ['required', 'date_format:H:i'],
+            'close_time' => ['required', 'date_format:H:i', 'after:open_time'],
+        ]);
+
+        Location::create($validated);
+
+        return redirect()->route('admin.locations')
+            ->with('success', 'Lokasi berhasil ditambahkan.');
+    }
+
+    public function editLocation(Location $location): View
+    {
+        return view('admin.locations.edit', compact('location'));
+    }
+
+    public function updateLocation(Request $request, Location $location): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'code' => ['required', 'string', 'max:10', 'unique:locations,code,' . $location->id],
+            'description' => ['nullable', 'string'],
+            'address' => ['nullable', 'string', 'max:255'],
+            'average_service_time' => ['required', 'integer', 'min:1', 'max:120'],
+            'open_time' => ['required', 'date_format:H:i'],
+            'close_time' => ['required', 'date_format:H:i', 'after:open_time'],
+            'is_active' => ['boolean'],
+        ]);
+
+        $location->update($validated);
+
+        return redirect()->route('admin.locations')
+            ->with('success', 'Lokasi berhasil diperbarui.');
+    }
+
+    public function deleteLocation(Location $location): RedirectResponse
+    {
+        $location->delete();
+
+        return redirect()->route('admin.locations')
+            ->with('success', 'Lokasi berhasil dihapus.');
+    }
+
+    // Counter Management
+    public function counters(Location $location): View
+    {
+        $counters = $location->counters()->with('currentOperator')->get();
+        return view('admin.counters.index', compact('location', 'counters'));
+    }
+
+    public function storeCounter(Request $request, Location $location): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+        ]);
+
+        $location->counters()->create($validated);
+
+        return back()->with('success', 'Loket berhasil ditambahkan.');
+    }
+
+    public function toggleCounter(Counter $counter): RedirectResponse
+    {
+        $counter->update(['is_active' => !$counter->is_active]);
+
+        $status = $counter->is_active ? 'diaktifkan' : 'dinonaktifkan';
+        return back()->with('success', "Loket berhasil {$status}.");
+    }
+
+    public function deleteCounter(Counter $counter): RedirectResponse
+    {
+        $counter->delete();
+        return back()->with('success', 'Loket berhasil dihapus.');
+    }
+
+    // User Management
+    public function users(): View
+    {
+        $users = User::with('location')->get();
+        $locations = Location::where('is_active', true)->get();
+        return view('admin.users.index', compact('users', 'locations'));
+    }
+
+    public function updateUser(Request $request, User $user): RedirectResponse
+    {
+        $validated = $request->validate([
+            'role' => ['required', 'in:admin,operator,viewer'],
+            'location_id' => ['nullable', 'exists:locations,id'],
+        ]);
+
+        $user->update($validated);
+
+        return back()->with('success', 'User berhasil diperbarui.');
+    }
+}

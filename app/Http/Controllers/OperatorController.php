@@ -1,0 +1,185 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Events\QueueUpdated;
+use App\Models\Counter;
+use App\Models\Location;
+use App\Models\Ticket;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+
+class OperatorController extends Controller
+{
+    public function dashboard(): View
+    {
+        $user = auth()->user();
+        $location = $user->location;
+
+        if (!$location) {
+            abort(403, 'Anda belum ditugaskan ke lokasi manapun.');
+        }
+
+        $counter = $user->operatingCounter;
+        $currentTicket = $counter?->currentTicket();
+
+        $waitingTickets = $location->waitingTickets()->get();
+        $todayStats = [
+            'served' => $location->todayTickets()->where('status', 'completed')->count(),
+            'waiting' => $waitingTickets->count(),
+            'skipped' => $location->todayTickets()->where('status', 'skipped')->count(),
+        ];
+
+        $counters = $location->counters()->where('is_active', true)->with('currentOperator')->get();
+
+        return view('operator.dashboard', compact(
+            'location',
+            'counter',
+            'currentTicket',
+            'waitingTickets',
+            'todayStats',
+            'counters'
+        ));
+    }
+
+    public function assignCounter(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'counter_id' => ['required', 'exists:counters,id'],
+        ]);
+
+        $user = auth()->user();
+        $counter = Counter::findOrFail($validated['counter_id']);
+
+        // Check if counter belongs to user's location
+        if ($counter->location_id !== $user->location_id) {
+            return back()->with('error', 'Loket tidak valid.');
+        }
+
+        // Check if counter is already occupied
+        if ($counter->current_operator_id && $counter->current_operator_id !== $user->id) {
+            return back()->with('error', 'Loket sudah digunakan operator lain.');
+        }
+
+        // Remove user from previous counter if any
+        Counter::where('current_operator_id', $user->id)->update(['current_operator_id' => null]);
+
+        // Assign user to new counter
+        $counter->update(['current_operator_id' => $user->id]);
+
+        return back()->with('success', 'Berhasil masuk ke ' . $counter->name);
+    }
+
+    public function leaveCounter(): RedirectResponse
+    {
+        $user = auth()->user();
+
+        Counter::where('current_operator_id', $user->id)->update(['current_operator_id' => null]);
+
+        return back()->with('success', 'Berhasil keluar dari loket.');
+    }
+
+    public function callNext(): RedirectResponse
+    {
+        $user = auth()->user();
+        $counter = $user->operatingCounter;
+
+        if (!$counter) {
+            return back()->with('error', 'Anda belum memilih loket.');
+        }
+
+        // Check if already serving
+        $currentTicket = $counter->currentTicket();
+        if ($currentTicket) {
+            return back()->with('error', 'Selesaikan tiket saat ini terlebih dahulu.');
+        }
+
+        // Get next waiting ticket
+        $nextTicket = Ticket::where('location_id', $user->location_id)
+            ->where('status', 'waiting')
+            ->orderBy('created_at')
+            ->first();
+
+        if (!$nextTicket) {
+            return back()->with('info', 'Tidak ada antrian yang menunggu.');
+        }
+
+        $nextTicket->call($counter, $user);
+        broadcast(new QueueUpdated($user->location))->toOthers();
+
+        return back()->with('success', 'Memanggil tiket ' . $nextTicket->ticket_number);
+    }
+
+    public function startServing(Ticket $ticket): RedirectResponse
+    {
+        $user = auth()->user();
+
+        if ($ticket->served_by !== $user->id) {
+            return back()->with('error', 'Tiket ini bukan milik Anda.');
+        }
+
+        if ($ticket->status !== 'calling') {
+            return back()->with('error', 'Status tiket tidak valid.');
+        }
+
+        $ticket->startServing();
+
+        return back()->with('success', 'Mulai melayani tiket ' . $ticket->ticket_number);
+    }
+
+    public function completeTicket(Ticket $ticket): RedirectResponse
+    {
+        $user = auth()->user();
+
+        if ($ticket->served_by !== $user->id) {
+            return back()->with('error', 'Tiket ini bukan milik Anda.');
+        }
+
+        if (!in_array($ticket->status, ['calling', 'serving'])) {
+            return back()->with('error', 'Status tiket tidak valid.');
+        }
+
+        $ticket->complete();
+        broadcast(new QueueUpdated($user->location))->toOthers();
+
+        return back()->with('success', 'Tiket ' . $ticket->ticket_number . ' selesai.');
+    }
+
+    public function skipTicket(Ticket $ticket): RedirectResponse
+    {
+        $user = auth()->user();
+
+        if ($ticket->served_by !== $user->id) {
+            return back()->with('error', 'Tiket ini bukan milik Anda.');
+        }
+
+        if (!in_array($ticket->status, ['calling', 'serving'])) {
+            return back()->with('error', 'Status tiket tidak valid.');
+        }
+
+        $ticket->skip();
+        broadcast(new QueueUpdated($user->location))->toOthers();
+
+        return back()->with('info', 'Tiket ' . $ticket->ticket_number . ' dilewati.');
+    }
+
+    public function recallTicket(Ticket $ticket): RedirectResponse
+    {
+        $user = auth()->user();
+        $counter = $user->operatingCounter;
+
+        if (!$counter) {
+            return back()->with('error', 'Anda belum memilih loket.');
+        }
+
+        if ($ticket->status !== 'calling' || $ticket->served_by !== $user->id) {
+            return back()->with('error', 'Tidak dapat memanggil ulang tiket ini.');
+        }
+
+        // Re-broadcast the call event
+        $ticket->call($counter, $user);
+
+        return back()->with('success', 'Memanggil ulang tiket ' . $ticket->ticket_number);
+    }
+}
