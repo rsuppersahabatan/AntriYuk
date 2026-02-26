@@ -17,7 +17,9 @@ class TicketController extends Controller
             return view('tickets.closed', compact('location'));
         }
 
-        return view('tickets.create', compact('location'));
+        $serviceCategories = $location->serviceCategories()->where('is_active', true)->get();
+
+        return view('tickets.create', compact('location', 'serviceCategories'));
     }
 
     public function store(Request $request, Location $location): RedirectResponse
@@ -29,12 +31,14 @@ class TicketController extends Controller
         $validated = $request->validate([
             'customer_name' => ['nullable', 'string', 'max:255'],
             'customer_phone' => ['nullable', 'string', 'max:20'],
+            'service_category_id' => ['nullable', 'exists:service_categories,id'],
         ]);
 
         $ticket = Ticket::createTicket(
             $location,
             $validated['customer_name'] ?? null,
-            $validated['customer_phone'] ?? null
+            $validated['customer_phone'] ?? null,
+            $validated['service_category_id'] ?? null
         );
 
         broadcast(new QueueUpdated($location))->toOthers();
@@ -45,7 +49,7 @@ class TicketController extends Controller
 
     public function show(Ticket $ticket): View
     {
-        $ticket->load(['location', 'counter']);
+        $ticket->load(['location', 'counter', 'feedback', 'serviceCategory']);
 
         return view('tickets.show', compact('ticket'));
     }

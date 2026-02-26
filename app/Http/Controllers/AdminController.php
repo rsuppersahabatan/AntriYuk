@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Counter;
 use App\Models\Location;
+use App\Models\ServiceCategory;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -143,5 +144,38 @@ class AdminController extends Controller
         $user->update($validated);
 
         return back()->with('success', 'User berhasil diperbarui.');
+    }
+
+    // Service Category Management
+    public function serviceCategories(Location $location): View
+    {
+        $categories = $location->serviceCategories()->get();
+        return view('admin.service-categories.index', compact('location', 'categories'));
+    }
+
+    public function storeServiceCategory(Request $request, Location $location): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+        ]);
+
+        $location->serviceCategories()->create($validated);
+
+        return back()->with('success', 'Kategori layanan berhasil ditambahkan.');
+    }
+
+    public function toggleServiceCategory(ServiceCategory $category): RedirectResponse
+    {
+        $category->update(['is_active' => !$category->is_active]);
+
+        $status = $category->is_active ? 'diaktifkan' : 'dinonaktifkan';
+        return back()->with('success', "Kategori layanan berhasil {$status}.");
+    }
+
+    public function deleteServiceCategory(ServiceCategory $category): RedirectResponse
+    {
+        $category->delete();
+        return back()->with('success', 'Kategori layanan berhasil dihapus.');
     }
 }

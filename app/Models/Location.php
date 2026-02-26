@@ -46,6 +46,16 @@ class Location extends Model
         return $this->hasMany(User::class);
     }
 
+    public function serviceCategories(): HasMany
+    {
+        return $this->hasMany(ServiceCategory::class);
+    }
+
+    public function bookings(): HasMany
+    {
+        return $this->hasMany(Booking::class);
+    }
+
     public function activeCounters(): HasMany
     {
         return $this->counters()->where('is_active', true);

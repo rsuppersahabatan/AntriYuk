@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Counter;
 use App\Models\Location;
+use App\Models\ServiceCategory;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -41,7 +42,7 @@ class DatabaseSeeder extends Seeder
             'description' => 'Loket pembayaran tagihan dan transaksi',
             'address' => 'Lantai 1, Gedung Utama',
             'average_service_time' => 5,
-            'open_time' => '08:00',
+            'open_time' => '08:00', 
             'close_time' => '16:00',
         ]);
 
@@ -98,5 +99,16 @@ class DatabaseSeeder extends Seeder
             'role' => 'operator',
             'location_id' => $registration->id,
         ]);
+
+        // Create Service Categories
+        ServiceCategory::create(['location_id' => $customerService->id, 'name' => 'Informasi Umum', 'description' => 'Pertanyaan seputar layanan']);
+        ServiceCategory::create(['location_id' => $customerService->id, 'name' => 'Komplain', 'description' => 'Pengaduan dan keluhan']);
+        ServiceCategory::create(['location_id' => $customerService->id, 'name' => 'Pembukaan Rekening', 'description' => 'Buka rekening baru']);
+
+        ServiceCategory::create(['location_id' => $payment->id, 'name' => 'Pembayaran Tagihan', 'description' => 'Bayar tagihan bulanan']);
+        ServiceCategory::create(['location_id' => $payment->id, 'name' => 'Transfer', 'description' => 'Transfer antar rekening']);
+
+        ServiceCategory::create(['location_id' => $registration->id, 'name' => 'Pendaftaran Baru', 'description' => 'Daftar layanan baru']);
+        ServiceCategory::create(['location_id' => $registration->id, 'name' => 'Perpanjangan', 'description' => 'Perpanjang layanan']);
     }
 }

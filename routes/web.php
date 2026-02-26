@@ -2,8 +2,11 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\OperatorController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TicketController;
 use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Middleware\EnsureUserIsOperator;
@@ -33,6 +36,17 @@ Route::get('/tickets/check', [TicketController::class, 'check'])->name('tickets.
 Route::get('/locations/{location}/ticket', [TicketController::class, 'create'])->name('tickets.create');
 Route::post('/locations/{location}/ticket', [TicketController::class, 'store'])->name('tickets.store');
 Route::get('/tickets/{ticket}', [TicketController::class, 'show'])->name('tickets.show');
+
+// Feedback routes (public)
+Route::post('/tickets/{ticket}/feedback', [FeedbackController::class, 'store'])->name('feedback.store');
+
+// Booking routes (public)
+Route::get('/bookings/check', [BookingController::class, 'check'])->name('bookings.check');
+Route::get('/locations/{location}/booking', [BookingController::class, 'create'])->name('bookings.create');
+Route::post('/locations/{location}/booking', [BookingController::class, 'store'])->name('bookings.store');
+Route::get('/bookings/{booking}', [BookingController::class, 'show'])->name('bookings.show');
+Route::post('/bookings/{booking}/check-in', [BookingController::class, 'checkIn'])->name('bookings.check-in');
+Route::post('/bookings/{booking}/cancel', [BookingController::class, 'cancel'])->name('bookings.cancel');
 
 // Auth routes
 Route::middleware('guest')->group(function () {
@@ -77,4 +91,13 @@ Route::middleware(['auth', EnsureUserIsAdmin::class])->prefix('admin')->group(fu
     // User management
     Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
     Route::put('/users/{user}', [AdminController::class, 'updateUser'])->name('admin.users.update');
+
+    // Reports
+    Route::get('/reports', [ReportController::class, 'index'])->name('admin.reports');
+
+    // Service Category management
+    Route::get('/locations/{location}/categories', [AdminController::class, 'serviceCategories'])->name('admin.categories');
+    Route::post('/locations/{location}/categories', [AdminController::class, 'storeServiceCategory'])->name('admin.categories.store');
+    Route::post('/categories/{category}/toggle', [AdminController::class, 'toggleServiceCategory'])->name('admin.categories.toggle');
+    Route::delete('/categories/{category}', [AdminController::class, 'deleteServiceCategory'])->name('admin.categories.delete');
 });

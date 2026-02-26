@@ -1,8 +1,8 @@
 <x-layout title="Cek Antrian">
-    <div class="min-h-screen bg-slate-50 py-12">
+    <div class="min-h-screen bg-slate-50 dark:bg-slate-900 py-12">
         <div class="max-w-lg mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Main Card -->
-            <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl dark:shadow-slate-900/50 overflow-hidden">
                 <!-- Header -->
                 <div class="bg-slate-900 text-white p-8 text-center">
                     <div class="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -18,7 +18,7 @@
                 <div class="p-8">
                     <form method="GET" action="{{ route('tickets.check') }}">
                         <div class="mb-6">
-                            <label for="ticket_number" class="block text-sm font-semibold text-slate-700 mb-2">
+                            <label for="ticket_number" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                                 Nomor Tiket
                             </label>
                             <input
@@ -26,12 +26,12 @@
                                 id="ticket_number"
                                 name="ticket_number"
                                 value="{{ request('ticket_number') }}"
-                                class="w-full px-6 py-4 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-2xl font-bold tracking-widest uppercase transition-colors"
+                                class="w-full px-6 py-4 border-2 border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-2xl font-bold tracking-widest uppercase transition-colors"
                                 placeholder="CS-001"
                                 required
                                 autofocus
                             >
-                            <p class="text-slate-500 text-sm text-center mt-2">Format: KODE-NOMOR (contoh: CS-001)</p>
+                            <p class="text-slate-500 dark:text-slate-400 text-sm text-center mt-2">Format: KODE-NOMOR (contoh: CS-001)</p>
                         </div>
 
                         <button
@@ -48,12 +48,12 @@
 
                 <!-- Divider -->
                 <div class="px-8">
-                    <div class="border-t border-slate-200"></div>
+                    <div class="border-t border-slate-200 dark:border-slate-700"></div>
                 </div>
 
                 <!-- CTA -->
-                <div class="p-8 bg-slate-50 text-center">
-                    <p class="text-slate-600 mb-4">Belum punya tiket?</p>
+                <div class="p-8 bg-slate-50 dark:bg-slate-900/50 text-center">
+                    <p class="text-slate-600 dark:text-slate-400 mb-4">Belum punya tiket?</p>
                     <a href="{{ route('locations.index') }}" class="inline-flex items-center bg-slate-900 hover:bg-slate-800 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
                         Ambil tiket baru
                         <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -1,8 +1,8 @@
 <x-layout title="Beranda">
     <!-- Hero Section -->
-    <div class="relative overflow-hidden bg-white">
+    <div class="relative overflow-hidden bg-white dark:bg-slate-900">
         <div class="max-w-7xl mx-auto">
-            <div class="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
+            <div class="relative z-10 pb-8 bg-white dark:bg-slate-900 sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
                 <main class="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
                     <div class="sm:text-center lg:text-left">
                         <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 mb-4">
@@ -11,11 +11,11 @@
                             </svg>
                             Antrian Digital
                         </span>
-                        <h1 class="text-4xl tracking-tight font-extrabold text-slate-900 sm:text-5xl md:text-6xl">
+                        <h1 class="text-4xl tracking-tight font-extrabold text-slate-900 dark:text-white sm:text-5xl md:text-6xl">
                             <span class="block">Antri Lebih</span>
                             <span class="block text-blue-600">Cerdas & Efisien</span>
                         </h1>
-                        <p class="mt-3 text-base text-slate-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
+                        <p class="mt-3 text-base text-slate-500 dark:text-slate-400 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
                             Tidak perlu menunggu lama di tempat. Ambil tiket digital, pantau posisi antrian dari mana saja, dan datang saat giliran Anda tiba.
                         </p>
                         <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
@@ -28,7 +28,7 @@
                                 </a>
                             </div>
                             <div class="mt-3 sm:mt-0 sm:ml-3">
-                                <a href="{{ route('tickets.check') }}" class="w-full flex items-center justify-center px-8 py-4 border border-slate-300 text-base font-medium rounded-xl text-slate-700 bg-white hover:bg-slate-50 md:py-4 md:text-lg md:px-10">
+                                <a href="{{ route('tickets.check') }}" class="w-full flex items-center justify-center px-8 py-4 border border-slate-300 dark:border-slate-600 text-base font-medium rounded-xl text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 md:py-4 md:text-lg md:px-10">
                                     Cek Antrian Saya
                                 </a>
                             </div>
@@ -38,7 +38,7 @@
             </div>
         </div>
         <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
-            <div class="h-56 w-full bg-blue-50 sm:h-72 md:h-96 lg:w-full lg:h-full flex items-center justify-center">
+            <div class="h-56 w-full bg-blue-50 dark:bg-slate-800 sm:h-72 md:h-96 lg:w-full lg:h-full flex items-center justify-center">
                 <svg class="w-64 h-64 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
                 </svg>
@@ -71,64 +71,64 @@
     </div>
 
     <!-- Features Section -->
-    <div class="py-16 bg-white">
+    <div class="py-16 bg-white dark:bg-slate-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-base text-blue-600 font-semibold tracking-wide uppercase">Fitur Unggulan</h2>
                 <p class="mt-2 text-3xl font-extrabold text-slate-900 sm:text-4xl">
                     Cara Kerja AntriYuk
                 </p>
-                <p class="mt-4 max-w-2xl text-xl text-slate-500 mx-auto">
+                <p class="mt-4 max-w-2xl text-xl text-slate-500 dark:text-slate-400 mx-auto">
                     Tiga langkah mudah untuk pengalaman antri tanpa stres
                 </p>
             </div>
 
             <div class="grid gap-8 md:grid-cols-3">
                 <!-- Step 1 -->
-                <div class="relative bg-white p-8 rounded-2xl border border-slate-200 hover:shadow-lg transition-shadow">
+                <div class="relative bg-white dark:bg-slate-800 p-8 rounded-2xl border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-shadow">
                     <div class="absolute -top-4 left-8">
                         <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold">1</span>
                     </div>
                     <div class="mt-4">
-                        <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center mb-5">
-                            <svg class="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-14 h-14 bg-blue-100 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center mb-5">
+                            <svg class="w-7 h-7 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
                             </svg>
                         </div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-3">Ambil Tiket Digital</h3>
-                        <p class="text-slate-600 leading-relaxed">Pilih lokasi layanan dan ambil tiket antrian secara online. Tidak perlu datang lebih awal.</p>
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Ambil Tiket Digital</h3>
+                        <p class="text-slate-600 dark:text-slate-400 leading-relaxed">Pilih lokasi layanan dan ambil tiket antrian secara online. Tidak perlu datang lebih awal.</p>
                     </div>
                 </div>
 
                 <!-- Step 2 -->
-                <div class="relative bg-white p-8 rounded-2xl border border-slate-200 hover:shadow-lg transition-shadow">
+                <div class="relative bg-white dark:bg-slate-800 p-8 rounded-2xl border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-shadow">
                     <div class="absolute -top-4 left-8">
                         <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-green-600 text-white text-sm font-bold">2</span>
                     </div>
                     <div class="mt-4">
-                        <div class="w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center mb-5">
-                            <svg class="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-14 h-14 bg-green-100 dark:bg-green-900/30 rounded-2xl flex items-center justify-center mb-5">
+                            <svg class="w-7 h-7 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-3">Pantau Real-time</h3>
-                        <p class="text-slate-600 leading-relaxed">Lihat posisi antrian dan estimasi waktu tunggu langsung dari smartphone Anda.</p>
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Pantau Real-time</h3>
+                        <p class="text-slate-600 dark:text-slate-400 leading-relaxed">Lihat posisi antrian dan estimasi waktu tunggu langsung dari smartphone Anda.</p>
                     </div>
                 </div>
 
                 <!-- Step 3 -->
-                <div class="relative bg-white p-8 rounded-2xl border border-slate-200 hover:shadow-lg transition-shadow">
+                <div class="relative bg-white dark:bg-slate-800 p-8 rounded-2xl border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-shadow">
                     <div class="absolute -top-4 left-8">
                         <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-purple-600 text-white text-sm font-bold">3</span>
                     </div>
                     <div class="mt-4">
-                        <div class="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center mb-5">
-                            <svg class="w-7 h-7 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-14 h-14 bg-purple-100 dark:bg-purple-900/30 rounded-2xl flex items-center justify-center mb-5">
+                            <svg class="w-7 h-7 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                             </svg>
                         </div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-3">Datang Tepat Waktu</h3>
-                        <p class="text-slate-600 leading-relaxed">Terima notifikasi saat giliran hampir tiba. Datang tepat waktu tanpa menunggu lama.</p>
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Datang Tepat Waktu</h3>
+                        <p class="text-slate-600 dark:text-slate-400 leading-relaxed">Terima notifikasi saat giliran hampir tiba. Datang tepat waktu tanpa menunggu lama.</p>
                     </div>
                 </div>
             </div>
@@ -137,25 +137,25 @@
 
     <!-- Available Locations Preview -->
     @if(isset($locations) && $locations->count() > 0)
-    <div class="py-16 bg-slate-50">
+    <div class="py-16 bg-slate-50 dark:bg-slate-800/50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-base text-blue-600 font-semibold tracking-wide uppercase">Lokasi Tersedia</h2>
-                <p class="mt-2 text-3xl font-extrabold text-slate-900 sm:text-4xl">
+                <p class="mt-2 text-3xl font-extrabold text-slate-900 dark:text-white sm:text-4xl">
                     Pilih Layanan Anda
                 </p>
             </div>
 
             <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 @foreach($locations->take(3) as $location)
-                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-lg transition-shadow">
+                <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-lg transition-shadow">
                     <div class="p-6">
                         <div class="flex items-start justify-between mb-4">
                             <div>
                                 <span class="inline-block bg-blue-600 text-white text-xs font-bold px-2.5 py-1 rounded-lg mb-2">
                                     {{ $location->code }}
                                 </span>
-                                <h3 class="text-xl font-bold text-slate-900">{{ $location->name }}</h3>
+                                <h3 class="text-xl font-bold text-slate-900 dark:text-white">{{ $location->name }}</h3>
                             </div>
                             @if($location->isOpen())
                                 <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-green-100 text-green-800">
@@ -171,10 +171,10 @@
                         </div>
 
                         @if($location->description)
-                            <p class="text-slate-600 text-sm mb-4 line-clamp-2">{{ $location->description }}</p>
+                            <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-2">{{ $location->description }}</p>
                         @endif
 
-                        <div class="flex items-center text-sm text-slate-500 mb-4 space-x-4">
+                        <div class="flex items-center text-sm text-slate-500 dark:text-slate-400 mb-4 space-x-4">
                             <span class="flex items-center">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -189,7 +189,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="px-6 py-4 bg-slate-50 border-t border-slate-100">
+                    <div class="px-6 py-4 bg-slate-50 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-700">
                         <a href="{{ route('tickets.create', $location) }}" class="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition-colors">
                             Ambil Tiket
                         </a>

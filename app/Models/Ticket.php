@@ -8,6 +8,7 @@ use App\Events\TicketStatusChanged;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Ticket extends Model
 {
@@ -15,6 +16,7 @@ class Ticket extends Model
 
     protected $fillable = [
         'location_id',
+        'service_category_id',
         'counter_id',
         'served_by',
         'ticket_number',
@@ -51,6 +53,16 @@ class Ticket extends Model
     public function servedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'served_by');
+    }
+
+    public function serviceCategory(): BelongsTo
+    {
+        return $this->belongsTo(ServiceCategory::class);
+    }
+
+    public function feedback(): HasOne
+    {
+        return $this->hasOne(Feedback::class);
     }
 
     public function getPositionAttribute(): int
@@ -130,10 +142,11 @@ class Ticket extends Model
         broadcast(new TicketStatusChanged($this))->toOthers();
     }
 
-    public static function createTicket(Location $location, ?string $customerName = null, ?string $customerPhone = null): self
+    public static function createTicket(Location $location, ?string $customerName = null, ?string $customerPhone = null, ?int $serviceCategoryId = null): self
     {
         $ticket = self::create([
             'location_id' => $location->id,
+            'service_category_id' => $serviceCategoryId,
             'ticket_number' => $location->generateTicketNumber(),
             'customer_name' => $customerName,
             'customer_phone' => $customerPhone,
