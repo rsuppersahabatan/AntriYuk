@@ -8,6 +8,8 @@ RUN apk add --no-cache \
     npm \
     libpng-dev \
     libzip-dev \
+    freetype-dev \
+    libjpeg-turbo-dev \
     zip \
     unzip \
     git \
@@ -16,6 +18,7 @@ RUN apk add --no-cache \
     sqlite-dev \
     oniguruma-dev \
     icu-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install \
         pdo \
         pdo_sqlite \
@@ -37,7 +40,7 @@ WORKDIR /var/www/html
 COPY composer.json composer.lock ./
 
 # Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction
+RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction --ignore-platform-reqs
 
 # Copy package files
 COPY package.json package-lock.json ./
